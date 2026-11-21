@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import PirateAnimation from './components/PirateAnimation';
+import PirateAnimation from './components/pirate/PirateAnimation';
 import './App.css';
 
 const API_URL = 'http://localhost:3001/api';

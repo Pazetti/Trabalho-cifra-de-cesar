@@ -1,0 +1,48 @@
+/* Cenário do convés do navio (descriptografar, cena 1). */
+
+/* === CONVÉS DO NAVIO (DESCRIPTOGRAFAR CENA 1) === */
+.deck-backdrop-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 1;
+}
+
+.deck-sea-wave {
+  animation: svgWaveScroll 4.5s linear infinite;
+}
+
+.deck-lantern {
+  transform-box: fill-box;
+  transform-origin: top center;
+  animation: lanternSway 2.4s ease-in-out infinite;
+}
+
+.lantern-glow {
+  animation: lanternPulse 1.8s ease-in-out infinite alternate;
+}
+
+.bottle-on-deck {
+  margin-bottom: 2px;
+}
+
+@keyframes lanternSway {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes lanternPulse {
+  from {
+    opacity: 0.72;
+  }
+  to {
+    opacity: 1;
+  }
+}

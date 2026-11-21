@@ -1,0 +1,41 @@
+/* Legenda e botão de pular abaixo do palco. */
+
+.stage-caption {
+  margin: 12px 0 8px;
+  font-size: 0.95rem;
+  color: #f3d58d;
+  font-weight: 600;
+  animation: captionIn var(--duration-scene) var(--ease-out);
+}
+
+@keyframes captionIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.skip-btn {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid #64748b;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-hover) ease,
+    color var(--duration-hover) ease,
+    transform var(--duration-press) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .skip-btn:hover {
+    border-color: #d4af37;
+    color: #f3d58d;
+  }
+}
+
+.skip-btn:active {
+  transform: scale(0.97);
+}

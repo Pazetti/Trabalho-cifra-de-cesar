@@ -1,0 +1,28 @@
+/* Movimento reduzido. Deve ser importado por último. */
+
+/* === MOVIMENTO REDUZIDO ===
+   Sem loops e sem deslocamentos: cada cena vira um quadro estático no estado
+   final da ação (baú trancado, garrafa lançada...), trocado por fade. As
+   legendas continuam contando a história no mesmo ritmo. */
+@media (prefers-reduced-motion: reduce) {
+  .pirate-stage *,
+  .pirate-stage *::before,
+  .pirate-stage *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .pirate-stage .scene-layer {
+    animation: sceneIn var(--duration-scene) ease !important;
+  }
+
+  .pirate-stage-wrapper,
+  .stage-caption {
+    animation-name: sceneIn;
+  }
+
+  .skip-btn:active {
+    transform: none;
+  }
+}

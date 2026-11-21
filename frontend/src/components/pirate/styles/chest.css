@@ -1,0 +1,489 @@
+/* Baú 3D: tampa articulada, ouro, fechadura e itens que entram/saem. */
+
+/* === BAÚ 3D COM DOBRADIÇA, BOCA E OURO === */
+.chest-3d {
+  position: relative;
+  width: 128px;
+  height: 82px;
+  perspective: 420px;
+}
+
+.chest-shadow {
+  position: absolute;
+  bottom: -8px;
+  left: -8px;
+  right: -8px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(45, 26, 8, 0.55);
+  filter: blur(3px);
+  z-index: 0;
+}
+
+.chest-cavity {
+  position: absolute;
+  bottom: 44px;
+  left: 0;
+  width: 128px;
+  height: 32px;
+  clip-path: polygon(8px 0%, 120px 0%, 128px 100%, 0% 100%);
+  background: #3d2410;
+  border-top: 3px solid #6b421f;
+  z-index: 1;
+}
+
+.cavity-back-wall {
+  position: absolute;
+  inset: 3px 10px 6px 10px;
+  background: linear-gradient(180deg, #1a120c 0%, #0d0805 100%);
+  box-shadow: inset 0 6px 12px rgba(0, 0, 0, 0.9);
+}
+
+.cavity-floor {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 0;
+  height: 10px;
+  background: #090603;
+}
+
+.chest-hinges {
+  position: absolute;
+  top: 0;
+  left: 22px;
+  right: 22px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hinge {
+  width: 14px;
+  height: 6px;
+  background: linear-gradient(180deg, #78716c, #44403c);
+  border: 1px solid #1c1917;
+  border-radius: 2px;
+}
+
+/* Pilha de ouro dentro do baú */
+.chest-gold-pile {
+  position: absolute;
+  bottom: 42px;
+  left: 8px;
+  width: 112px;
+  height: 30px;
+  z-index: 3;
+  pointer-events: none;
+  filter: drop-shadow(0 -2px 5px rgba(250, 204, 21, 0.45));
+}
+
+.gold-sparkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: goldTwinkle 1.4s ease-in-out infinite;
+}
+
+.sparkle-2 {
+  animation-delay: 0.45s;
+}
+
+.sparkle-3 {
+  animation-delay: 0.9s;
+}
+
+.chest-front {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 128px;
+  height: 46px;
+  background: repeating-linear-gradient(
+    180deg,
+    #6b3e17 0px,
+    #583110 13px,
+    #321907 14px,
+    #623814 15px
+  );
+  border: 3px solid #4a2e14;
+  border-radius: 3px 3px 7px 7px;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 224, 160, 0.25),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.45);
+  z-index: 5;
+}
+
+.front-strap {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 13px;
+  background: linear-gradient(90deg, #523d28, #8c6d46 50%, #42301e);
+  border-left: 1px solid #2b1d11;
+  border-right: 1px solid #2b1d11;
+}
+
+.front-strap-left {
+  left: 20px;
+}
+
+.front-strap-right {
+  right: 20px;
+}
+
+.front-strap::before,
+.front-strap::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d4af37;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+}
+
+.front-strap::before {
+  top: 7px;
+}
+
+.front-strap::after {
+  bottom: 7px;
+}
+
+.chest-lock-plate {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 22px;
+  background: linear-gradient(180deg, #eab308, #a16207);
+  border: 2px solid #422006;
+  border-radius: 4px 4px 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.keyhole {
+  width: 5px;
+  height: 9px;
+  background: #1c1006;
+  border-radius: 3px 3px 1px 1px;
+}
+
+.chest-lid-pivot {
+  position: absolute;
+  bottom: 74px;
+  left: 0;
+  width: 128px;
+  height: 38px;
+  transform-origin: center bottom;
+  transform-style: preserve-3d;
+  z-index: 2;
+}
+
+.lid-face {
+  position: absolute;
+  inset: 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.lid-inside {
+  background: linear-gradient(180deg, #273742 0%, #1c2833 100%);
+  border: 4px solid #593517;
+  border-bottom-width: 3px;
+  border-radius: 6px 6px 2px 2px;
+  box-shadow: inset 0 6px 14px rgba(0, 0, 0, 0.65);
+  transform: rotateX(0deg);
+}
+
+.lid-ribs {
+  display: flex;
+  justify-content: space-around;
+  padding: 3px 10px 0;
+}
+
+.lid-rib {
+  width: 22px;
+  height: 7px;
+  background: #3f2410;
+  border-bottom: 2px solid #241307;
+  border-radius: 0 0 3px 3px;
+}
+
+.lid-outside {
+  background: repeating-linear-gradient(
+    180deg,
+    #7e4a1e 0px,
+    #663914 10px,
+    #361c08 11px,
+    #70411a 12px
+  );
+  border: 3px solid #4a2e14;
+  border-bottom: 4px solid #3a220d;
+  border-radius: 14px 14px 4px 4px;
+  box-shadow:
+    inset 0 6px 10px rgba(255, 224, 160, 0.22),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.45);
+  transform: rotateX(180deg);
+}
+
+.lid-strap {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 13px;
+  background: linear-gradient(90deg, #523d28, #9c7b50 50%, #42301e);
+  border-left: 1px solid #2b1d11;
+  border-right: 1px solid #2b1d11;
+}
+
+.lid-strap-left {
+  left: 20px;
+}
+
+.lid-strap-right {
+  right: 20px;
+}
+
+.lid-strap::before,
+.lid-strap::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d4af37;
+}
+
+.lid-strap::before {
+  top: 6px;
+}
+
+.lid-strap::after {
+  bottom: 5px;
+}
+
+.lid-clasp {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 10px;
+  background: linear-gradient(180deg, #facc15, #a16207);
+  border: 2px solid #422006;
+  border-radius: 3px 3px 6px 6px;
+}
+
+.chest-glow {
+  position: absolute;
+  bottom: 38px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.95), transparent 72%);
+  opacity: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.chest-closing .chest-lid-pivot {
+  animation: closeChestLid 2.4s ease-in-out forwards;
+}
+
+.chest-closing .chest-lock-plate {
+  animation: lockFlash 2.4s ease-in-out forwards;
+}
+
+.chest-opening .chest-lid-pivot {
+  animation: openChestLid 2.1s ease-in-out forwards;
+}
+
+.chest-opening .chest-glow {
+  animation: showGlow 2.1s ease-in forwards;
+}
+
+.chest-open .chest-lid-pivot {
+  transform: rotateX(-8deg);
+  z-index: 2;
+}
+
+.chest-open .chest-glow {
+  opacity: 1;
+  animation: pulseGlow 1s infinite alternate;
+}
+
+/* === PERGAMINHO E CHAVE NO BAÚ === */
+.parchment-drop {
+  position: absolute;
+  top: -66px;
+  left: 50%;
+  font-size: 2.2rem;
+  z-index: 4;
+  animation: dropIntoMouth 1.15s ease-in forwards;
+}
+
+.parchment-reveal {
+  position: absolute;
+  top: 22px;
+  left: 50%;
+  font-size: 2.5rem;
+  z-index: 4;
+  animation: riseFromMouth 1.3s ease-out forwards;
+}
+
+.key-unlock {
+  position: absolute;
+  bottom: 18px;
+  left: -58px;
+  font-size: 2rem;
+  z-index: 9;
+  animation: keyToLock 1.2s ease-in-out forwards;
+}
+
+@keyframes goldTwinkle {
+  0%,
+  100% {
+    transform: scale(0.45);
+    opacity: 0.35;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes dropIntoMouth {
+  0% {
+    transform: translate(-50%, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  70% {
+    transform: translate(-50%, 84px) scale(0.75) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 102px) scale(0.55) rotate(16deg);
+    opacity: 0;
+  }
+}
+
+@keyframes closeChestLid {
+  0%,
+  44% {
+    transform: rotateX(-8deg);
+    z-index: 2;
+  }
+  62% {
+    transform: rotateX(-92deg);
+    z-index: 7;
+  }
+  82% {
+    transform: rotateX(-180deg);
+    z-index: 7;
+  }
+  88% {
+    transform: rotateX(-173deg);
+    z-index: 7;
+  }
+  100% {
+    transform: rotateX(-180deg);
+    z-index: 7;
+  }
+}
+
+@keyframes lockFlash {
+  0%,
+  80% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  90% {
+    box-shadow: 0 0 18px 4px rgba(250, 204, 21, 0.95);
+  }
+  100% {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@keyframes openChestLid {
+  0%,
+  48% {
+    transform: rotateX(-180deg);
+    z-index: 7;
+  }
+  68% {
+    transform: rotateX(-90deg);
+    z-index: 7;
+  }
+  72% {
+    transform: rotateX(-75deg);
+    z-index: 2;
+  }
+  100% {
+    transform: rotateX(-8deg);
+    z-index: 2;
+  }
+}
+
+@keyframes keyToLock {
+  0% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  55% {
+    transform: translateX(104px) rotate(0deg);
+    opacity: 1;
+  }
+  82% {
+    transform: translateX(104px) rotate(90deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(104px) rotate(90deg) scale(0.6);
+    opacity: 0;
+  }
+}
+
+@keyframes showGlow {
+  0%,
+  60% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes riseFromMouth {
+  0% {
+    transform: translate(-50%, 12px) scale(0.55);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -68px) scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes pulseGlow {
+  from {
+    transform: translateX(-50%) scale(0.95);
+    opacity: 0.72;
+  }
+  to {
+    transform: translateX(-50%) scale(1.15);
+    opacity: 1;
+  }
+}

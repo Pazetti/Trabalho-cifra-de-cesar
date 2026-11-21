@@ -1,0 +1,292 @@
+/* Cena do mar: navio navegando, garrafa boiando e arpão. */
+
+/* === CENA 3 (MAR): NAVIO NAVEGANDO + GARRAFA BOIANDO + ARPÃO === */
+.sea-voyage-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.svg-wave-back {
+  animation: svgWaveScroll 5.5s linear infinite;
+}
+
+.svg-wave-mid {
+  animation: svgWaveScroll 3.4s linear infinite;
+}
+
+.svg-wave-front {
+  animation: svgWaveScroll 2.4s linear infinite;
+}
+
+.pirate-ship-sailing {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: shipSailBob 2.2s ease-in-out infinite;
+}
+
+.pirate-flag-wave {
+  transform-box: fill-box;
+  transform-origin: right center;
+  animation: flagFlutter 1.1s ease-in-out infinite alternate;
+}
+
+.ship-wake {
+  animation: wakePulse 1.6s ease-in-out infinite alternate;
+}
+
+.sea-bottle-bob {
+  animation: bottleFloatSea 1.8s ease-in-out infinite;
+}
+
+.sea-bottle-reel {
+  animation: bottleReelIn 3.5s linear forwards;
+}
+
+.harpoon-rope {
+  stroke-dasharray: 202 202;
+  stroke-dashoffset: 202;
+  animation: harpoonRopeShoot 3.5s linear forwards;
+}
+
+.harpoon-head {
+  opacity: 0;
+  animation: harpoonHeadShoot 3.5s linear forwards;
+}
+
+.h-splash-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: harpoonSplashRing 3.5s ease-out forwards;
+}
+
+.h-drop-1 {
+  opacity: 0;
+  animation: harpoonDropLeft 3.5s ease-out forwards;
+}
+
+.h-drop-2 {
+  opacity: 0;
+  animation: harpoonDropUp 3.5s ease-out forwards;
+}
+
+.h-drop-3 {
+  opacity: 0;
+  animation: harpoonDropRight 3.5s ease-out forwards;
+}
+
+.capture-sparkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  animation: captureSparkle 3.5s ease-out forwards;
+}
+
+@keyframes shipSailBob {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(1.8deg);
+  }
+}
+
+@keyframes flagFlutter {
+  from {
+    transform: skewY(-4deg) scaleX(0.94);
+  }
+  to {
+    transform: skewY(4deg) scaleX(1.04);
+  }
+}
+
+@keyframes wakePulse {
+  from {
+    opacity: 0.25;
+    transform: translateX(0px);
+  }
+  to {
+    opacity: 0.52;
+    transform: translateX(6px);
+  }
+}
+
+@keyframes bottleFloatSea {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-14deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(10deg);
+  }
+}
+
+/* Easing por trecho do arpão (a curva vale do keyframe onde está até o próximo):
+   disparo  22%→40%  cubic-bezier(0.4, 0.6, 0.7, 0.95)  (projétil: chega com velocidade em ~37%,
+                     sincronizado com o respingo em 39%; um ease-out forte chegaria em 30% e "frearia" no ar)
+   recolher 50%→86%  cubic-bezier(0.77, 0, 0.175, 1)  = --ease-in-out (tensiona, puxa, assenta)
+   Rope, head e garrafa usam os mesmos trechos para andarem juntos. */
+@keyframes harpoonRopeShoot {
+  0% {
+    stroke-dashoffset: 202;
+  }
+  22% {
+    stroke-dashoffset: 202;
+    animation-timing-function: cubic-bezier(0.4, 0.6, 0.7, 0.95);
+  }
+  40% {
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dashoffset: 0;
+    animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  86%,
+  100% {
+    stroke-dashoffset: 202;
+  }
+}
+
+@keyframes harpoonHeadShoot {
+  0%,
+  21% {
+    transform: translateX(0px);
+    opacity: 0;
+  }
+  22% {
+    transform: translateX(0px);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.4, 0.6, 0.7, 0.95);
+  }
+  40% {
+    transform: translateX(-202px);
+    opacity: 1;
+  }
+  50% {
+    transform: translateX(-202px);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  86% {
+    transform: translateX(0px);
+    opacity: 1;
+  }
+  89%,
+  100% {
+    transform: translateX(0px);
+    opacity: 0;
+  }
+}
+
+@keyframes bottleReelIn {
+  0%,
+  40% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 1;
+  }
+  40% {
+    /* tranco da fisgada */
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  45% {
+    transform: translate(4px, 3px) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(0px, 0px) scale(1);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  86% {
+    transform: translate(200px, -28px) scale(0.9);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  94%,
+  100% {
+    transform: translate(206px, -16px) scale(0.55);
+    opacity: 0;
+  }
+}
+
+@keyframes harpoonSplashRing {
+  0%,
+  39% {
+    transform: scale(0.2);
+    opacity: 0;
+  }
+  42% {
+    opacity: 0.95;
+  }
+  55%,
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}
+
+@keyframes harpoonDropLeft {
+  0%,
+  39% {
+    transform: translate(0px, 0px);
+    opacity: 0;
+  }
+  43% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    transform: translate(-16px, -20px);
+    opacity: 0;
+  }
+}
+
+@keyframes harpoonDropUp {
+  0%,
+  39% {
+    transform: translate(0px, 0px);
+    opacity: 0;
+  }
+  43% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    transform: translate(0px, -26px);
+    opacity: 0;
+  }
+}
+
+@keyframes harpoonDropRight {
+  0%,
+  39% {
+    transform: translate(0px, 0px);
+    opacity: 0;
+  }
+  43% {
+    opacity: 1;
+  }
+  56%,
+  100% {
+    transform: translate(16px, -18px);
+    opacity: 0;
+  }
+}
+
+@keyframes captureSparkle {
+  0%,
+  85% {
+    transform: scale(0.2) rotate(0deg);
+    opacity: 0;
+  }
+  91% {
+    transform: scale(1.2) rotate(45deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.4) rotate(90deg);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,11 @@
+/* Estilos da animação pirata.
+   A ordem importa: segue a ordem original das regras (a cascata depende dela)
+   e reduced-motion.css fica sempre por último. */
+@import './stage.css';
+@import './beach.css';
+@import './ship-deck.css';
+@import './chest.css';
+@import './bottle.css';
+@import './sea-voyage.css';
+@import './controls.css';
+@import './reduced-motion.css';
