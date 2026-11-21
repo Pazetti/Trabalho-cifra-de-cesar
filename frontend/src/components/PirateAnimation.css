@@ -1,6 +1,27 @@
 .pirate-stage-wrapper {
   margin-top: 20px;
   text-align: center;
+  animation: stageIn 300ms var(--ease-out);
+}
+
+@keyframes stageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* Camada de cena: ocupa o palco inteiro e entra com fade a cada etapa */
+.scene-layer {
+  position: absolute;
+  inset: 0;
+  animation: sceneIn var(--duration-scene) var(--ease-out);
+}
+
+@keyframes sceneIn {
+  from {
+    opacity: 0;
+  }
 }
 
 .pirate-stage {
@@ -734,6 +755,14 @@
   font-size: 0.95rem;
   color: #f3d58d;
   font-weight: 600;
+  animation: captionIn var(--duration-scene) var(--ease-out);
+}
+
+@keyframes captionIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
 }
 
 .skip-btn {
@@ -744,11 +773,48 @@
   border-radius: 6px;
   font-size: 0.8rem;
   cursor: pointer;
+  transition:
+    border-color var(--duration-hover) ease,
+    color var(--duration-hover) ease,
+    transform var(--duration-press) var(--ease-out);
 }
 
-.skip-btn:hover {
-  border-color: #d4af37;
-  color: #f3d58d;
+@media (hover: hover) and (pointer: fine) {
+  .skip-btn:hover {
+    border-color: #d4af37;
+    color: #f3d58d;
+  }
+}
+
+.skip-btn:active {
+  transform: scale(0.97);
+}
+
+/* === MOVIMENTO REDUZIDO ===
+   Sem loops e sem deslocamentos: cada cena vira um quadro estático no estado
+   final da ação (baú trancado, garrafa lançada...), trocado por fade. As
+   legendas continuam contando a história no mesmo ritmo. */
+@media (prefers-reduced-motion: reduce) {
+  .pirate-stage *,
+  .pirate-stage *::before,
+  .pirate-stage *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .pirate-stage .scene-layer {
+    animation: sceneIn var(--duration-scene) ease !important;
+  }
+
+  .pirate-stage-wrapper,
+  .stage-caption {
+    animation-name: sceneIn;
+  }
+
+  .skip-btn:active {
+    transform: none;
+  }
 }
 
 /* === KEYFRAMES === */
@@ -1101,14 +1167,25 @@
   }
 }
 
+/* Easing por trecho do arpão (a curva vale do keyframe onde está até o próximo):
+   disparo  22%→40%  cubic-bezier(0.4, 0.6, 0.7, 0.95)  (projétil: chega com velocidade em ~37%,
+                     sincronizado com o respingo em 39%; um ease-out forte chegaria em 30% e "frearia" no ar)
+   recolher 50%→86%  cubic-bezier(0.77, 0, 0.175, 1)  = --ease-in-out (tensiona, puxa, assenta)
+   Rope, head e garrafa usam os mesmos trechos para andarem juntos. */
 @keyframes harpoonRopeShoot {
-  0%,
-  22% {
+  0% {
     stroke-dashoffset: 202;
   }
-  40%,
+  22% {
+    stroke-dashoffset: 202;
+    animation-timing-function: cubic-bezier(0.4, 0.6, 0.7, 0.95);
+  }
+  40% {
+    stroke-dashoffset: 0;
+  }
   50% {
     stroke-dashoffset: 0;
+    animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
   }
   86%,
   100% {
@@ -1125,11 +1202,16 @@
   22% {
     transform: translateX(0px);
     opacity: 1;
+    animation-timing-function: cubic-bezier(0.4, 0.6, 0.7, 0.95);
   }
-  40%,
+  40% {
+    transform: translateX(-202px);
+    opacity: 1;
+  }
   50% {
     transform: translateX(-202px);
     opacity: 1;
+    animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
   }
   86% {
     transform: translateX(0px);
@@ -1148,6 +1230,10 @@
     transform: translate(0px, 0px) scale(1);
     opacity: 1;
   }
+  40% {
+    /* tranco da fisgada */
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
   45% {
     transform: translate(4px, 3px) scale(1);
     opacity: 1;
@@ -1155,10 +1241,12 @@
   50% {
     transform: translate(0px, 0px) scale(1);
     opacity: 1;
+    animation-timing-function: cubic-bezier(0.77, 0, 0.175, 1);
   }
   86% {
     transform: translate(200px, -28px) scale(0.9);
     opacity: 1;
+    animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
   }
   94%,
   100% {

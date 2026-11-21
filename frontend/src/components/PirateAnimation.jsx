@@ -530,6 +530,8 @@ export default function PirateAnimation({ mode, onComplete }) {
   return (
     <div className="pirate-stage-wrapper">
       <div className={`pirate-stage mode-${mode} step-${step}`}>
+        {/* key por etapa: cada cena remonta e entra com fade, sem corte seco */}
+        <div className="scene-layer" key={`${mode}-${step}`}>
         {isSeaVoyage ? (
           <SeaVoyageScene />
         ) : isShipDeck ? (
@@ -600,9 +602,12 @@ export default function PirateAnimation({ mode, onComplete }) {
             )}
           </>
         )}
+        </div>
       </div>
 
-      <p className="stage-caption">{captions[mode][step]}</p>
+      <p className="stage-caption" key={`caption-${mode}-${step}`}>
+        {captions[mode][step]}
+      </p>
 
       <button type="button" className="skip-btn" onClick={onComplete}>
         Pular animação ⏭

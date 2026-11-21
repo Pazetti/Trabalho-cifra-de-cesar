@@ -176,7 +176,7 @@ export default function App() {
         )}
       </header>
 
-      {feedback.text && <div className={`alert ${feedback.type}`}>{feedback.text}</div>}
+      {feedback.text && <div key={feedback.text} className={`alert ${feedback.type}`}>{feedback.text}</div>}
 
       {/* TELA 1: LOGIN */}
       {screen === 'login' && (
