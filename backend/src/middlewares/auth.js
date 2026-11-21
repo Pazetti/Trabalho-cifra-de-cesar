@@ -1,6 +1,14 @@
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'chave_super_secreta_tesouro_cesar_2026';
+// A chave do JWT fica no arquivo .env (que NÃO vai para o GitHub).
+// Se alguém pegar a chave, consegue criar tokens falsos, por isso ela não fica no código.
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET || JWT_SECRET.length < 32) {
+  console.error('Erro: defina JWT_SECRET no arquivo backend/.env (mínimo 32 caracteres).');
+  console.error('Dica: copie o arquivo .env.example para .env e troque o valor da chave.');
+  process.exit(1);
+}
 
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;

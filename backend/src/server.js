@@ -1,3 +1,12 @@
+const path = require('path');
+
+// Carrega as variáveis do arquivo backend/.env (recurso nativo do Node 20.12+)
+try {
+  process.loadEnvFile(path.join(__dirname, '..', '.env'));
+} catch {
+  // Sem .env: segue com as variáveis do sistema (o auth.js avisa se faltar a chave)
+}
+
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -96,22 +105,26 @@ app.post('/api/decrypt', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Informe a mensagem criptografada e o hash.' });
     }
 
-    const keyRecord = await CipherKey.findOne({ where: { hash } });
+    // Uso único: marca o hash como usado SÓ SE ele ainda não foi usado.
+    // É um único comando no banco (UPDATE ... WHERE hash = ? AND usado = false),
+    // então dois pedidos ao mesmo tempo não conseguem usar o mesmo hash.
+    const [linhasAlteradas] = await CipherKey.update(
+      { usado: true },
+      { where: { hash, usado: false } }
+    );
 
-    if (!keyRecord) {
-      return res.status(404).json({ error: 'Hash inválido ou não encontrado.' });
-    }
-
-    if (keyRecord.usado) {
+    if (linhasAlteradas === 0) {
+      // Nada foi alterado: ou o hash não existe, ou já tinha sido usado
+      const existe = await CipherKey.findOne({ where: { hash } });
+      if (!existe) {
+        return res.status(404).json({ error: 'Hash inválido ou não encontrado.' });
+      }
       return res.status(403).json({ error: 'Este hash já foi utilizado e não é mais válido.' });
     }
 
     // Descriptografa aplicando o passo invertido
+    const keyRecord = await CipherKey.findOne({ where: { hash } });
     const decryptedMessage = caesarCipher(encryptedMessage, -keyRecord.passo);
-
-    // Marca o hash como utilizado (uso único)
-    keyRecord.usado = true;
-    await keyRecord.save();
 
     return res.json({ decryptedMessage });
   } catch (err) {
@@ -119,10 +132,16 @@ app.post('/api/decrypt', authMiddleware, async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3001;
+// Só liga o servidor quando rodamos "npm start".
+// Nos testes o arquivo é importado (require) e o próprio teste liga o app.
+if (require.main === module) {
+  const PORT = process.env.PORT || 3001;
 
-sequelize.sync().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Backend rodando em http://localhost:${PORT}`);
+  sequelize.sync().then(() => {
+    app.listen(PORT, () => {
+      console.log(`Backend rodando em http://localhost:${PORT}`);
+    });
   });
-});
+}
+
+module.exports = app;
